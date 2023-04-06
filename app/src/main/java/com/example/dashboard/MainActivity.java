@@ -4,22 +4,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 
 public class MainActivity extends AppCompatActivity {
     ImageButton add_btn;
 
     FirebaseAuth mAuth;
+
+    TextView txtview;
     ImageButton del_btn;
     ImageButton open_btn;
     ImageButton fill_btn;
 
     ImageButton log_btn;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     @Override
@@ -30,7 +40,12 @@ public class MainActivity extends AppCompatActivity {
         del_btn = (ImageButton)findViewById(R.id.delete_button);
         open_btn = (ImageButton)findViewById(R.id.open_button);
         fill_btn = (ImageButton)findViewById(R.id.fill_button);
+        txtview = (TextView)findViewById(R.id.textUsername);
         mAuth = FirebaseAuth.getInstance();
+
+
+
+        //txtview.setText(name);
 
         log_btn = (ImageButton)findViewById(R.id.imageMenu);
         log_btn.setOnClickListener(new View.OnClickListener() {
@@ -61,10 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),OpenDustbin.class));
             }
         });
-
-
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -73,5 +85,17 @@ public class MainActivity extends AppCompatActivity {
         {
             startActivity(new Intent(getApplicationContext(),loginRegister.class));
         }
+        String user_id = mAuth.getCurrentUser().getUid();
+
+        DocumentReference documentReference = db.collection("user_login").document(user_id);
+
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                String name = value.getString("fname").toString();
+                String[] fname = name.split("\\s");
+                txtview.setText(fname[0]);
+            }
+        });
     }
 }

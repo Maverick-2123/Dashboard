@@ -12,13 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class signup extends AppCompatActivity {
 
     Button button;
+
+    String user_id;
 
     Button signup_btn;
     FirebaseAuth mAuth;
@@ -27,10 +35,13 @@ public class signup extends AppCompatActivity {
     EditText name;
 
     EditText password;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        //FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         button = (Button)findViewById(R.id.button4);
         mAuth = FirebaseAuth.getInstance();
@@ -38,6 +49,7 @@ public class signup extends AppCompatActivity {
         email = (EditText)findViewById(R.id.editTextPassword);
         name = (EditText)findViewById(R.id.editTextEmail);
         password = (EditText)findViewById(R.id.editTextPassword2);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,6 +61,9 @@ public class signup extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createUser();
+
+                //String user_id = email.getText().toString();
+
             }
         });
     }
@@ -72,6 +87,17 @@ public class signup extends AppCompatActivity {
                     if (task.isSuccessful())
                     {
                         Toast.makeText(signup.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                        user_id = mAuth.getCurrentUser().getUid();
+                        DocumentReference documentReference = db.collection("user_login").document(user_id);
+                        Map<String,Object> user = new HashMap<>();
+                        user.put("fname",name.getText().toString());
+                        user.put("email",email.getText().toString());
+                        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+
+                            }
+                        });
                         startActivity(new Intent(getApplicationContext(),login.class));
                     }
                     else
