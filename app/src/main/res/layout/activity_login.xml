@@ -96,16 +96,16 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
+            android:background="@drawable/edittext"
+            android:ems="10"
+            android:hint="Enter your Password"
+            android:inputType="textPersonName|textPassword"
             android:padding="8dp"
             android:textColor="#a2a4b5"
-            android:ems="10"
-            android:background="@drawable/edittext"
-            android:inputType="textPersonName"
-            android:hint="Enter your Password"
             android:textColorHint="@color/black"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/textView7"

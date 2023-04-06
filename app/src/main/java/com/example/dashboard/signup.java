@@ -1,27 +1,88 @@
 package com.example.dashboard;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class signup extends AppCompatActivity {
 
     Button button;
 
+    Button signup_btn;
+    FirebaseAuth mAuth;
+
+    EditText email;
+    EditText name;
+
+    EditText password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
         button = (Button)findViewById(R.id.button4);
+        mAuth = FirebaseAuth.getInstance();
+        signup_btn = (Button)findViewById(R.id.button3);
+        email = (EditText)findViewById(R.id.editTextPassword);
+        name = (EditText)findViewById(R.id.editTextEmail);
+        password = (EditText)findViewById(R.id.editTextPassword2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(),login.class));
             }
         });
+
+        signup_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createUser();
+            }
+        });
     }
+
+    private void createUser()
+    {
+        String email_user = email.getText().toString();
+        String password_user = password.getText().toString();
+
+        if (TextUtils.isEmpty(email_user))
+        {
+            email.setError("Email cannot be empty");
+        } else if (TextUtils.isEmpty(password_user)) {
+            password.setError("Password cannot be empty");
+        }
+        else
+        {
+            mAuth.createUserWithEmailAndPassword(email_user,password_user).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful())
+                    {
+                        Toast.makeText(signup.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),login.class));
+                    }
+                    else
+                    {
+                        Toast.makeText(signup.this, "Registration error "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+    }
+
+
 }
