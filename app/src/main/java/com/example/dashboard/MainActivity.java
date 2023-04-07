@@ -2,13 +2,16 @@ package com.example.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -19,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static String act_name;
     ImageButton add_btn;
 
     FirebaseAuth mAuth;
@@ -43,7 +47,32 @@ public class MainActivity extends AppCompatActivity {
         txtview = (TextView)findViewById(R.id.textUsername);
         mAuth = FirebaseAuth.getInstance();
 
+        BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.home);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId())
+                {
+                    case R.id.home:
+                        return true;
+                    case R.id.nearby:
+                        startActivity(new Intent(getApplicationContext(),nearby.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.account:
+                        startActivity(new Intent(getApplicationContext(),account.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.settings:
+                        startActivity(new Intent(getApplicationContext(),setting.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
 
         //txtview.setText(name);
 
@@ -94,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 String name = value.getString("fname").toString();
                 String[] fname = name.split("\\s");
+                act_name = fname[0];
                 txtview.setText(fname[0]);
             }
         });
