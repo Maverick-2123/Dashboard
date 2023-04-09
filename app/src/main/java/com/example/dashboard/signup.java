@@ -88,6 +88,9 @@ public class signup extends AppCompatActivity {
                     {
                         Toast.makeText(signup.this, "Registration successful", Toast.LENGTH_SHORT).show();
                         user_id = mAuth.getCurrentUser().getUid();
+
+                        //Code to upload data to firestore
+
                         DocumentReference documentReference = db.collection("user_login").document(user_id);
                         Map<String,Object> user = new HashMap<>();
                         user.put("fname",name.getText().toString());

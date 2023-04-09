@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class MainActivity extends AppCompatActivity {
     public static String act_name;
+    public static String fname[];
     ImageButton add_btn;
 
     FirebaseAuth mAuth;
@@ -59,10 +60,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.nearby:
                         startActivity(new Intent(getApplicationContext(),nearby.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.account:
-                        startActivity(new Intent(getApplicationContext(),account.class));
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.settings:
@@ -114,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
         {
             startActivity(new Intent(getApplicationContext(),loginRegister.class));
         }
+
+        // Code for fetch data to Firestore
+
         String user_id = mAuth.getCurrentUser().getUid();
 
         DocumentReference documentReference = db.collection("user_login").document(user_id);
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 String name = value.getString("fname").toString();
-                String[] fname = name.split("\\s");
+                fname = name.split("\\s");
                 act_name = fname[0];
                 txtview.setText(fname[0]);
             }

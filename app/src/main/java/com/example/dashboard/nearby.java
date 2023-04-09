@@ -42,10 +42,6 @@ public class nearby extends AppCompatActivity implements OnMapReadyCallback {
                         return true;
                     case R.id.nearby:
                         return true;
-                    case R.id.account:
-                        startActivity(new Intent(getApplicationContext(),account.class));
-                        overridePendingTransition(0,0);
-                        return true;
                     case R.id.settings:
                         startActivity(new Intent(getApplicationContext(),setting.class));
                         overridePendingTransition(0,0);

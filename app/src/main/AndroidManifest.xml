@@ -21,9 +21,6 @@
             android:name=".setting"
             android:exported="false" />
         <activity
-            android:name=".account"
-            android:exported="false" />
-        <activity
             android:name=".nearby"
             android:exported="false" />
         <activity

@@ -11,10 +11,7 @@
         android:icon="@drawable/ic_location"
         android:title="Nearby"/>
 
-    <item
-        android:id="@+id/account"
-        android:icon="@drawable/ic_account_circle"
-        android:title="Account"/>
+
 
     <item
         android:id="@+id/settings"
